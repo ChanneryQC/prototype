@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CareerOS Prototype</title>
+  <style>
+    :root{
+      --bg:#07111f;
+      --panel:#0e1a2f;
+      --panel2:#12213d;
+      --text:#e8eefc;
+      --muted:#9db0d1;
+      --brand:#7c5cff;
+      --brand2:#28d7a3;
+      --line:rgba(255,255,255,.08);
+      --shadow:0 18px 50px rgba(0,0,0,.35);
+      --radius:20px;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,Arial,sans-serif;
+      background:radial-gradient(circle at top,#11264d 0,#07111f 45%,#050a12 100%);
+      color:var(--text);
+    }
+
+    a{color:inherit;text-decoration:none}
+    button,input,select{font:inherit}
+
+    .wrap{max-width:1320px;margin:0 auto;padding:20px}
+    .top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:18px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-weight:800;
+      font-size:20px;
+    }
+
+    .dot{
+      width:12px;
+      height:12px;
+      border-radius:50%;
+      background:linear-gradient(135deg,var(--brand),var(--brand2));
+      box-shadow:0 0 0 6px rgba(124,92,255,.15);
+    }
+
+    .tabs{display:flex;gap:10px;flex-wrap:wrap}
+    .tab{
+      padding:10px 14px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      color:var(--text);
+      border-radius:999px;
+      cursor:pointer;
+    }
+
+    .tab.active{
+      background:linear-gradient(135deg,var(--brand),#4aa3ff);
+      border-color:transparent;
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.3fr .9fr;
+      gap:18px;
+      margin:18px 0;
+    }
+
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.03));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+
+    .hero .card{padding:24px}
+
+    .kicker{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:7px 11px;
+      border-radius:999px;
+      background:rgba(40,215,163,.12);
+      color:#9ff3d9;
+      font-size:12px;
+      font-weight:700;
+    }
+
+    .hero h1{
+      margin:14px 0 10px;
+      font-size:42px;
+      line-height:1.05;
+    }
+
+    .hero p{
+      color:var(--muted);
+      max-width:60ch;
+      font-size:16px;
+      line-height:1.6;
+    }
+
+    .actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:18px;
+    }
+
+    .btn{
+      padding:12px 16px;
+      border-radius:14px;
+      border:1px solid transparent;
+      cursor:pointer;
+      font-weight:700;
+    }
+
+    .btn.primary{
+      background:linear-gradient(135deg,var(--brand),#4aa3ff);
+      color:#fff;
+    }
+
+    .btn.ghost{
+      background:rgba(255,255,255,.04);
+      border-color:var(--line);
+      color:var(--text);
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+    }
+
+    .stat{
+      padding:18px;
+      background:rgba(5,10,18,.35);
+      border:1px solid var(--line);
+      border-radius:18px;
+    }
+
+    .stat b{display:block;font-size:24px}
+    .stat span{color:var(--muted);font-size:13px}
+
+    .main{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:18px;
+      margin-top:18px;
+    }
+
+    .panel{padding:18px}
+    .panel h2{margin:0 0 12px;font-size:20px}
+    .muted{color:var(--muted)}
+
+    .searchbar{
+      display:grid;
+      grid-template-columns:1.1fr .7fr .5fr auto;
+      gap:10px;
+    }
+
+    .field{
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--line);
+      color:var(--text);
+      border-radius:14px;
+      padding:12px 14px;
+      outline:none;
+    }
+
+    .list{
+      display:grid;
+      gap:12px;
+      margin-top:14px;
+    }
+
+    .job{
+      padding:16px;
+      border-radius:18px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      cursor:pointer;
+    }
+
+    .job:hover,.job.active{
+      border-color:rgba(124,92,255,.55);
+      background:rgba(124,92,255,.08);
+    }
+
+    .row{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:flex-start;
+    }
+
+    .pill{
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(40,215,163,.12);
+      color:#9ff3d9;
+      font-size:12px;
+      font-weight:700;
+    }
+
+    .meta{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:10px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .grid2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .box{
+      padding:14px;
+      border-radius:16px;
+      background:rgba(5,10,18,.3);
+      border:1px solid var(--line);
+    }
+
+    .bars{display:grid;gap:10px}
+    .bar{
+      display:grid;
+      grid-template-columns:120px 1fr 40px;
+      gap:10px;
+      align-items:center;
+    }
+
+    .track{
+      height:10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.07);
+      overflow:hidden;
+    }
+
+    .fill{
+      height:100%;
+      border-radius:999px;
+      background:linear-gradient(90deg,var(--brand),var(--brand2));
+    }
+
+    .dash{display:none}
+    .dash.active{display:block}
+
+    .table{
+      width:100%;
+      border-collapse:collapse;
+    }
+
+    .table th,.table td{
+      text-align:left;
+      padding:12px;
+      border-bottom:1px solid var(--line);
+      font-size:14px;
+    }
+
+    .status{
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:700;
+    }
+
+    .s1{background:rgba(124,92,255,.16);color:#d9ceff}
+    .s2{background:rgba(40,215,163,.16);color:#9ff3d9}
+    .s3{background:rgba(255,190,92,.16);color:#ffe0b0}
+
+    .form{display:grid;gap:10px}
+    .textarea{min-height:92px;resize:vertical}
+
+    .footer{
+      margin:18px 0 6px;
+      color:var(--muted);
+      font-size:13px;
+      text-align:center;
+    }
+
+    @media (max-width:980px){
+      .hero,.main,.searchbar,.grid2{grid-template-columns:1fr}
+      .hero h1{font-size:34px}
+      .stats{grid-template-columns:1fr}
+      .top{flex-direction:column;align-items:flex-start}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div class="brand"><span class="dot"></span> CareerOS</div>
+      <div class="tabs">
+        <button class="tab active" data-view="home">Explore</button>
+        <button class="tab" data-view="candidate">Candidate dashboard</button>
+        <button class="tab" data-view="employer">Employer dashboard</button>
+      </div>
+    </div>
+
+    <section class="hero card">
+      <div class="kicker">Adaptive Readiness Profile • grows through projects, internships, and courses</div>
+      <h1>Help students prove readiness without starting from zero.</h1>
+      <p>A prototype jobsite where profiles evolve over time, employers see verified evidence, and students keep one living career identity from campus to career.</p>
+      <div class="actions">
+        <button class="btn primary" id="jumpSearch">Search jobs</button>
+        <button class="btn ghost" id="jumpProfile">View readiness profile</button>
+      </div>
+    </section>
+
+    <section class="stats" aria-label="platform stats">
+      <div class="stat card"><b>12.4k</b><span>active jobs and internships</span></div>
+      <div class="stat card"><b>91%</b><span>profile completeness after graduation</span></div>
+      <div class="stat card"><b>3.2x</b><span>faster shortlisting with evidence signals</span></div>
+    </section>
+
+    <section class="main">
+      <div class="card panel" id="homeView">
+        <h2>Job search and matching</h2>
+        <div class="searchbar" id="searchArea">
+          <input class="field" id="keyword" placeholder="Keyword search: AI, design, finance, marketing..." />
+          <input class="field" id="location" placeholder="Location" value="Johor Bahru" />
+          <select class="field" id="type">
+            <option>All types</option>
+            <option>Internship</option>
+            <option>Graduate</option>
+            <option>Full-time</option>
+          </select>
+          <button class="btn primary" id="searchBtn">Search</button>
+        </div>
+        <div class="list" id="jobList"></div>
+      </div>
+
+      <div class="card panel">
+        <div class="dash active" id="jobDetailDash">
+          <h2 id="jobTitle">Selected job</h2>
+          <div class="muted" id="jobCompany"></div>
+          <div class="meta" id="jobMeta"></div>
+          <div class="grid2" style="margin-top:14px;">
+            <div class="box">
+              <div class="pill">Why matched</div>
+              <p id="matchText" class="muted" style="line-height:1.6;margin-bottom:0"></p>
+            </div>
+            <div class="box">
+              <div class="pill">Apply</div>
+              <div class="form" style="margin-top:10px">
+                <input class="field" placeholder="Full name" value="Channery Student" />
+                <input class="field" placeholder="Email" value="student@email.com" />
+                <button class="btn primary">Submit application</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dash" id="candidateDash">
+          <h2>Candidate dashboard</h2>
+          <div class="grid2">
+            <div class="box">
+              <div class="pill">Resume builder</div>
+              <p class="muted">Drag-and-drop sections, AI bullet suggestions, export-ready profile summary.</p>
+            </div>
+            <div class="box">
+              <div class="pill">Applications</div>
+              <p class="muted">Track submitted, shortlisted, interview, and offer stages.</p>
+            </div>
+          </div>
+          <h3 style="margin:16px 0 10px;">Adaptive readiness profile</h3>
+          <div class="box bars" id="readinessBars"></div>
+        </div>
+
+        <div class="dash" id="employerDash">
+          <h2>Employer dashboard</h2>
+          <p class="muted">Review applicants, filter by readiness, and see student evidence across projects, internships, and courses.</p>
+          <table class="table">
+            <thead><tr><th>Candidate</th><th>Readiness</th><th>Evidence</th></tr></thead>
+            <tbody id="employerTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">Prototype concept for a modern career platform with living profiles and employer-ready evidence.</div>
+  </div>
+
+  <script>
+    const jobs = [
+      {title:'AI Product Intern', company:'Nova Labs', location:'Johor Bahru', type:'Internship', tags:['Python','Figma','Research'], score:94, match:'Strong match because your profile includes AI coursework, a capstone project, and product design experience.'},
+      {title:'Graduate Data Analyst', company:'Pulse Analytics', location:'Remote', type:'Graduate', tags:['SQL','Excel','Dashboard'], score:88, match:'Strong match because your readiness profile shows analytics projects, internship evidence, and a verified course badge.'},
+      {title:'Junior UX Designer', company:'Studio North', location:'Singapore', type:'Full-time', tags:['UI','Research','Prototyping'], score:81, match:'Good match because you have project evidence, presentation skills, and a portfolio link.'}
+    ];
+
+    const readiness = [
+      ['Academic foundation', 92],
+      ['Projects', 87],
+      ['Internships', 74],
+      ['Courses', 89],
+      ['Soft skills', 83]
+    ];
+
+    const candidates = [
+      ['Aina Rahman','92%','Capstone, internship, 4 courses'],
+      ['Daniel Lim','86%','Portfolio, leadership, 2 internships'],
+      ['Siti Nur','78%','Project work, certification, volunteering']
+    ];
+
+    const jobList = document.getElementById('jobList');
+    const jobTitle = document.getElementById('jobTitle');
+    const jobCompany = document.getElementById('jobCompany');
+    const jobMeta = document.getElementById('jobMeta');
+    const matchText = document.getElementById('matchText');
+    const tabs = [...document.querySelectorAll('.tab')];
+    const views = {
+      home: document.getElementById('jobDetailDash'),
+      candidate: document.getElementById('candidateDash'),
+      employer: document.getElementById('employerDash')
+    };
+
+    function renderJobs(list = jobs) {
+      jobList.innerHTML = list.map((j,i) => `
+        <div class="job ${i===0?'active':''}" data-i="${i}">
+          <div class="row">
+            <div>
+              <div class="pill">${j.type}</div>
+              <h3 style="margin:10px 0 6px;">${j.title}</h3>
+              <div class="muted">${j.company} • ${j.location}</div>
+            </div>
+            <div style="text-align:right">
+              <b>${j.score}%</b>
+              <div class="muted">match</div>
+            </div>
+          </div>
+          <div class="meta">${j.tags.map(t => `<span>${t}</span>`).join(' • ')}</div>
+        </div>
+      `).join('');
+
+      document.querySelectorAll('.job').forEach(el => {
+        el.onclick = () => selectJob(list[+el.dataset.i], el);
+      });
+
+      selectJob(list[0], document.querySelector('.job'));
+    }
+
+    function selectJob(j, el) {
+      document.querySelectorAll('.job').forEach(x => x.classList.remove('active'));
+      if (el) el.classList.add('active');
+      jobTitle.textContent = j.title;
+      jobCompany.textContent = j.company;
+      jobMeta.innerHTML = `<span class='pill'>${j.type}</span><span>${j.location}</span><span>${j.score}% match</span>`;
+      matchText.textContent = j.match;
+    }
+
+    function showView(name) {
+      Object.entries(views).forEach(([k,v]) => v.classList.toggle('active', k === name));
+      tabs.forEach(t => t.classList.toggle('active', t.dataset.view === name));
+    }
+
+    document.getElementById('searchBtn').onclick = () => {
+      const q = document.getElementById('keyword').value.toLowerCase();
+      const loc = document.getElementById('location').value.toLowerCase();
+      const typ = document.getElementById('type').value;
+
+      renderJobs(
+        jobs.filter(j =>
+          (!q || j.title.toLowerCase().includes(q) || j.tags.some(t => t.toLowerCase().includes(q))) &&
+          (!loc || j.location.toLowerCase().includes(loc)) &&
+          (typ === 'All types' || j.type === typ)
+        )
+      );
+      showView('home');
+    };
+
+    tabs.forEach(t => t.onclick = () => showView(t.dataset.view));
+    document.getElementById('jumpSearch').onclick = () => showView('home');
+    document.getElementById('jumpProfile').onclick = () => showView('candidate');
+
+    document.getElementById('readinessBars').innerHTML = readiness.map(([n,v]) => `
+      <div class='bar'>
+        <div>${n}</div>
+        <div class='track'><div class='fill' style='width:${v}%'></div></div>
+        <div>${v}%</div>
+      </div>
+    `).join('');
+
+    document.getElementById('employerTable').innerHTML = candidates.map(([n,r,e],i) => `
+      <tr>
+        <td>${n}</td>
+        <td><span class='status ${i===0?'s2':i===1?'s1':'s3'}'>${r}</span></td>
+        <td>${e}</td>
+      </tr>
+    `).join('');
+
+    renderJobs();
+  </script>
+</body>
+</html>
